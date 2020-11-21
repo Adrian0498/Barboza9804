@@ -73,7 +73,7 @@ public class  Memorama extends Stage implements EventHandler {
     }
 
     @Override
-    public void handle(Event event) {
+    public void handle(Event event) {//Evento para validar que se ponga el numero de cartas con el que se desea jugar
 
         if (txtNoTarjetas.getText().equals("")) {
             Alert alert3 = new Alert(Alert.AlertType.INFORMATION);
@@ -91,7 +91,7 @@ public class  Memorama extends Stage implements EventHandler {
 
         }
         try {
-            if (noCartas == 12) {
+            if (noCartas >= 12) {
                 Alert alert4 = new Alert(Alert.AlertType.INFORMATION);
                 alert4.setTitle("Atencion");
                 alert4.setHeaderText("!!!!!!!!!");
@@ -120,19 +120,18 @@ public class  Memorama extends Stage implements EventHandler {
                 initJuego();
             }
 
-        } catch (NullPointerException ne) {
+        } catch (NullPointerException e) {
 
         }
 
 
     }
 
-    private void initJuego() {
+    private void initJuego() { //se inicia el juego
 
         btnAceptar.setVisible(false);
         vBox.getChildren().remove(gdpMesa);
 
-        gdpMesa = new GridPane();
         arAsignacion = new String[2][noCartas];
         revolver();
         arTarjetas = new Button[2][noCartas];
@@ -145,10 +144,10 @@ public class  Memorama extends Stage implements EventHandler {
 
                 arTarjetas[i][j] = new Button();
 
-                int finalI = i;
+                int finalI = i;//variables auxiliares de posiciones del boton para enviar a metodo ver tarjeta
                 int finalJ = j;
 
-                arTarjetas[i][j].setOnAction(event -> {
+                arTarjetas[i][j].setOnAction(event -> { //se le da una accion a cada posicion del arreglo de tarjeta
                     verTarjeta(finalI, finalJ);
                 });
                 arTarjetas[i][j].setGraphic(imv);
@@ -156,10 +155,10 @@ public class  Memorama extends Stage implements EventHandler {
                 gdpMesa.add(arTarjetas[i][j], j, i);
             }
         }
-        vBox.getChildren().add(gdpMesa);
+        vBox.getChildren().add(gdpMesa);//se le agrega el gridpane
     }
 
-    private void checarPares(ArrayList<String> pos) {
+    private void checarPares(ArrayList<String> pos) {//metodo para verificar si la posicion del arreglo son pares
 
         //Llamamos al arraylist de nombres
         if (pos.get(0).equals(pos.get(1))) {
@@ -171,8 +170,8 @@ public class  Memorama extends Stage implements EventHandler {
                     alert.setHeaderText("Haz acertado a todos los pares!");
                     alert.setContentText("Tu puntuacion: " + aciertos + " de " + ganar);
                     alert.showAndWait();
-                    Thread.sleep(2000);
-                    System.exit(0);
+                    Thread.sleep(2000);//hilo para pausar el programa
+                    System.exit(0);//cierra el programa
                 } catch (InterruptedException exception) {
                     exception.printStackTrace();
                 }
@@ -188,7 +187,7 @@ public class  Memorama extends Stage implements EventHandler {
             ImageView imvrestore = new ImageView(restore1);
             imvrestore.setFitHeight(80);
             imvrestore.setPreserveRatio(true);
-            arTarjetas[auxPos.get(0)][auxPos.get(1)].setPrefSize(30, 30);
+            arTarjetas[auxPos.get(0)][auxPos.get(1)].setPrefSize(30, 30);//para volver a poner la carta de base que no se le atino
             arTarjetas[auxPos.get(0)][auxPos.get(1)].setGraphic(imvrestore);
 
             Image restore2 = new Image("sample/assets/carta_base.jpg");
@@ -232,7 +231,7 @@ public class  Memorama extends Stage implements EventHandler {
         imv.setPreserveRatio(true);
         arTarjetas[finalI][finalJ].setGraphic(imv);
 
-        if (pares < 2) {
+        if (pares < 2) {//lleva el control de los pares de las tarjetas
             //auxPos - Arraylist Que almacena posicion entera (x,y)
             auxPos.add(finalI);
             auxPos.add(finalJ);
@@ -252,7 +251,7 @@ public class  Memorama extends Stage implements EventHandler {
                 arAsignacion[i][j] = "";
             }
 
-        posImg = (int) (Math.random() * arImagenes.length);
+        posImg = (int) (Math.random() * arImagenes.length);//genera numero random para la posicion de la imagen
         for (int i = 0; i < noCartas; ) {
             posx = (int) (Math.random() * 2) + 0;
             posy = (int) (Math.random() * noCartas) + 0;
@@ -260,12 +259,12 @@ public class  Memorama extends Stage implements EventHandler {
 
                 switch (arImagenes[posImg]) {
                     case "Avestruz.jpg":
-                        contAv++;
+                        contAv++;//contador para la tarjeta
                         arAsignacion[posx][posy] = arImagenes[posImg];
                         if (contAv == 2) {
                             i++;
-                            arImagenes[posImg] = "";
-                            posImg = (int) (Math.random() * arImagenes.length);
+                            arImagenes[posImg] = "";//se borra el nombre del arreglo para que no se trabe
+                            posImg = (int) (Math.random() * arImagenes.length);//se vuelve a calcular una posicion de imagen aleatoria
                         }
                         break;
                     case "Buho.jpg":
@@ -380,7 +379,7 @@ public class  Memorama extends Stage implements EventHandler {
                         }
                         break;
 
-                    default:
+                    default://cuando no es ninguno de los casos anteriores calcula otra posicion aleatoria
                         posImg = (int) (Math.random() * arImagenes.length);
                         break;
                 }
